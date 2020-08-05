@@ -1,18 +1,3 @@
 <nav class="navbar navbar-expand-lg bg-light">
   <a class="navbar-brand" href="#">Healing potential</a>
-
-  <span ngbDropdown class="d-inline-block">
-    <button
-      class="btn btn-outline-primary"
-      id="classesDropdown"
-      ngbDropdownToggle
-    >
-      {{ classSelected }}
-    </button>
-    <div ngbDropdownMenu aria-labelledby="classesDropdown">
-      <button (click)="onSelectClass('Shaman')" ngbDropdownItem>Shaman</button>
-      <button (click)="onSelectClass('Priest')" ngbDropdownItem>Priest</button>
-      <button (click)="onSelectClass('Druid')" ngbDropdownItem>Druid</button>
-    </div>
-  </span>
 </nav>
