@@ -123,6 +123,10 @@
           }
         }
       }
-    }},
-  "defaultProject": "healing-potential"
+    }
+  },
+  "defaultProject": "healing-potential",
+  "cli": {
+    "analytics": false
+  }
 }
