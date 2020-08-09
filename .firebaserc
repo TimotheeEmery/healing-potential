@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "wow-chamheal": {
+      "hosting": {
+        "healing-potential": [
+          "wow-chamheal"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "wow-chamheal"
+  }
+}

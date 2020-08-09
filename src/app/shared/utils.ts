@@ -176,12 +176,11 @@ export class Utils {
       }
     }
 
-    console.log(
-      `Spells that will be used: ${highIterationSelected} * Rank ${firstTooHighRank} and ${lowIterationSelected} * Rank ${
-        firstTooHighRank - 1
-      } `
-    );
-
-    return maxHeal;
+    return {
+      maxHeal: maxHeal,
+      highIterationSelected: highIterationSelected,
+      firstTooHighRank: firstTooHighRank,
+      lowIterationSelected: lowIterationSelected
+    } 
   }
 }

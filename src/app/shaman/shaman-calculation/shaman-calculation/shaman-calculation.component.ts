@@ -1,6 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Utils } from 'src/app/shared/utils';
-import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-shaman-calculation',
@@ -8,7 +7,7 @@ import { FormGroup } from '@angular/forms';
   styleUrls: ['./shaman-calculation.component.scss'],
 })
 export class ShamanCalculationComponent implements OnInit {
-  time: number = 150;
+  @Input() time: number = 120;
   maxMana: number = 8000;
   mp5: number = 30;
   spell: string = 'healing-wave';
@@ -28,6 +27,10 @@ export class ShamanCalculationComponent implements OnInit {
 
   compared: string;
 
+  highIteration: number;
+  firstTooHighRank: number;
+  lowIteration: number;
+
   constructor() {}
 
   ngOnInit(): void {
@@ -35,7 +38,7 @@ export class ShamanCalculationComponent implements OnInit {
   }
 
   onCompute(): void {
-    this.healingPotential = Utils.healOutput(
+    let healOuputObject = Utils.healOutput(
       +this.time,
       +this.maxMana,
       +this.mp5,
@@ -43,6 +46,11 @@ export class ShamanCalculationComponent implements OnInit {
       +this.healBonus,
       +this.criticalRate / 100
     );
+
+    this.healingPotential = healOuputObject.maxHeal;
+    this.highIteration = healOuputObject.highIterationSelected;
+    this.firstTooHighRank = healOuputObject.firstTooHighRank;
+    this.lowIteration = healOuputObject.lowIterationSelected;
 
     // Mp5 Value
     const additionalHealingMp5 = Utils.healOutput(
@@ -52,7 +60,7 @@ export class ShamanCalculationComponent implements OnInit {
       this.spell,
       +this.healBonus,
       +this.criticalRate / 100
-    );
+    ).maxHeal;
     this.mp5Value = (additionalHealingMp5 - this.healingPotential) / 10;
 
     // Intel Value
@@ -63,7 +71,7 @@ export class ShamanCalculationComponent implements OnInit {
       this.spell,
       +this.healBonus,
       (+this.criticalRate + 10 / 59.2) / 100
-    );
+    ).maxHeal;
     this.intelValue = (additionalHealingIntel - this.healingPotential) / 10;
 
     // Heal Bonus Value
@@ -74,7 +82,7 @@ export class ShamanCalculationComponent implements OnInit {
       this.spell,
       +this.healBonus + 20,
       +this.criticalRate / 100
-    );
+    ).maxHeal;
     this.healBonusValue =
       (additionalHealingHealBonus - this.healingPotential) / 20;
 
@@ -86,7 +94,7 @@ export class ShamanCalculationComponent implements OnInit {
       this.spell,
       +this.healBonus,
       +this.criticalRate / 100
-    );
+    ).maxHeal;
     this.manaValue = (additionalHealingMana - this.healingPotential) / 150;
 
     // Critical strike value
@@ -97,7 +105,7 @@ export class ShamanCalculationComponent implements OnInit {
       this.spell,
       +this.healBonus,
       (+this.criticalRate + 3) / 100
-    );
+    ).maxHeal;
     this.criticalStrikeValue =
       (additionalCriticalStrike - this.healingPotential) / 3;
   }

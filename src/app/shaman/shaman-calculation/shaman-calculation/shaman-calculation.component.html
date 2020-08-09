@@ -44,14 +44,7 @@
     <button class="btn-success" (click)="addIntel()">Apply +Intel</button>
   </div>
   <div class="col">
-    <input
-      class="col"
-      appNumbersOnly
-      [(ngModel)]="addIntelNumber"
-      type="number"
-      min="0"
-      placeholder="Intel to add"
-    />
+    <input class="col" appNumbersOnly [(ngModel)]="addIntelNumber" type="number" min="0" placeholder="Intel to add" />
   </div>
 </div>
 <hr />
@@ -59,9 +52,18 @@
   <button class="col btn-primary" (click)="onCompute()">
     Compute score
   </button>
-  <label class="col"
-    >Healing potential: {{ healingPotential | number: "1.1-2" }}</label
-  >
+  <div class="col">
+    <span>Healing potential: {{ healingPotential | number: "1.1-2" }}</span>
+    <br>
+    <span>Spells that will be used: {{ highIteration }} *
+      Rank {{ firstTooHighRank }} and {{ lowIteration }} * Rank {{ firstTooHighRank - 1 }}
+    </span>
+  </div>
+
+</div>
+<div class="row">
+  <span class="col"></span>
+
 </div>
 
 <div class="row">Intel value: {{ intelValue | number: "1.1-2" }}</div>
@@ -84,7 +86,7 @@
       <option [ngValue]="criticalStrikeValue">Critical strike</option>
     </select>
     :
-    <select (change)="compare()" [(ngModel)]="compareToSelect"  id="comparison">
+    <select (change)="compare()" [(ngModel)]="compareToSelect" id="comparison">
       <option [ngValue]="intelValue">Intel</option>
       <option [ngValue]="mp5Value">Mp5</option>
       <option [ngValue]="healBonusValue">Heal bonus</option>
