@@ -44,26 +44,53 @@
     <button class="btn-success" (click)="addIntel()">Apply +Intel</button>
   </div>
   <div class="col">
-    <input class="col" appNumbersOnly [(ngModel)]="addIntelNumber" type="number" min="0" placeholder="Intel to add" />
+    <input
+      class="col"
+      appNumbersOnly
+      [(ngModel)]="addIntelNumber"
+      type="number"
+      min="0"
+      placeholder="Intel to add"
+    />
   </div>
 </div>
 <hr />
+<div class="row">
+  <div class="col">
+    <input
+      type="radio"
+      [id]="id + '-healing-wave'"
+      [name]="id + '-spell'"
+      value="healing-wave"
+      [(ngModel)]="spell"
+    />
+    <label [attr.for]="id + '-healing-wave'"> Healing wave</label><br />
+    <input
+      type="radio"
+      [id]="id + '-chain-heal'"
+      [name]="id + '-spell'"
+      value="chain-heal"
+      [(ngModel)]="spell"
+    />
+    <label [attr.for]="id + '-chain-heal'"> Chain heal</label><br />
+  </div>
+</div>
 <div class="row">
   <button class="col btn-primary" (click)="onCompute()">
     Compute score
   </button>
   <div class="col">
     <span>Healing potential: {{ healingPotential | number: "1.1-2" }}</span>
-    <br>
-    <span>Spells that will be used: {{ highIteration }} *
-      Rank {{ firstTooHighRank }} and {{ lowIteration }} * Rank {{ firstTooHighRank - 1 }}
+    <br />
+    <span
+      >Spells that will be used: {{ highIteration }} * Rank
+      {{ firstTooHighRank }} and {{ lowIteration }} * Rank
+      {{ firstTooHighRank - 1 }}
     </span>
   </div>
-
 </div>
 <div class="row">
   <span class="col"></span>
-
 </div>
 
 <div class="row">Intel value: {{ intelValue | number: "1.1-2" }}</div>
@@ -96,5 +123,5 @@
   </div>
 </div>
 <div class="row">
-  <div class="col text-center">1 : {{ compared | number: "1.0-2"  }}</div>
+  <div class="col text-center">1 : {{ compared | number: "1.0-2" }}</div>
 </div>

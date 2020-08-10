@@ -24,10 +24,13 @@ const HEALING_WAVE: Spell[] = [
   new Spell(10, 60, 3, 620, 1620, 1850),
 ];
 
-const CHAIN_HEAL: Spell[] = [];
+const CHAIN_HEAL: Spell[] = [
+  new Spell(1, 40, 2.5, 260, 320, 368),
+  new Spell(2, 46, 2.5, 315, 405, 465),
+  new Spell(3, 54, 2.5, 405, 551, 629),
+];
 
 export class Utils {
-
   // If the spell is below level 20, there is a penalty
   static levelPenalty(level: number): number {
     if (level < MINIMUM_LEVEL) {
@@ -71,6 +74,25 @@ export class Utils {
         healWithoutCrit *
           (CRITICAL_STRIKE_BONUS * (critChance + TIDAL_MASTERY_CRIT))
       );
+    } else if (spell === 'chain-heal') {
+      const chainHeal = CHAIN_HEAL[rank - 1];
+
+      const averageHeal =
+        ((chainHeal.minHeal + chainHeal.maxHeal) / 2) * PURIFICATION;
+
+      const healBonusAfterModifiers =
+        healBonus *
+        this.levelPenalty(chainHeal.level) *
+        this.durationPenalty(chainHeal.duration);
+
+      const healWithoutCrit = averageHeal + healBonusAfterModifiers;
+      const healWithCrit =
+        healWithoutCrit +
+        healWithoutCrit *
+          (CRITICAL_STRIKE_BONUS * (critChance + TIDAL_MASTERY_CRIT));
+
+      // Taking into account T2 bonuses
+      return healWithCrit * 2.0725;
     }
 
     return -1;
@@ -85,19 +107,45 @@ export class Utils {
         (healingWave.manaCost -
           healingWave.manaCost * TIDAL_FOCUS_MANA_REDUCTION)
       );
+    } else if (spell === 'chain-heal') {
+      const chainHeal = CHAIN_HEAL[rank - 1];
+      return (
+        (time / chainHeal.duration) *
+        (chainHeal.manaCost - chainHeal.manaCost * TIDAL_FOCUS_MANA_REDUCTION)
+      );
     }
     return -1;
   }
 
   // Look at which is the first rank that doesn't allow to cast the spell non-stop
-  static firstTooHighRank(time: number, availableMana: number): number {
-    let firstTooHighRank = HEALING_WAVE.length;
+  static firstTooHighRank(
+    time: number,
+    availableMana: number,
+    spell: string
+  ): number {
+    let highestRank;
+    if (spell === 'healing-wave') {
+      highestRank = HEALING_WAVE.length;
+    } else if (spell === 'chain-heal') {
+      highestRank = CHAIN_HEAL.length;
+    }
 
-    for (let i = 1; i <= HEALING_WAVE.length; i++) {
-      if (this.manaDrain(time, 'healing-wave', i) > availableMana) {
-        firstTooHighRank = i;
+    let firstTooHighRank = highestRank;
+
+    for (let rank = 1; rank <= highestRank; rank++) {
+      if (this.manaDrain(time, spell, rank) > availableMana) {
+        firstTooHighRank = rank;
         break;
       }
+    }
+
+    // To avoid using healing wave spell of rank 1 and 2 that are absolute garbage
+    if (spell === 'healing-wave' && firstTooHighRank < 4) {
+      firstTooHighRank = 4;
+    }
+
+    if (firstTooHighRank === 1) {
+      firstTooHighRank = 2;
     }
 
     return firstTooHighRank;
@@ -114,21 +162,42 @@ export class Utils {
   ) {
     const availableMana = manaMax + mp5 * (time / 5);
 
-    let firstTooHighRank = this.firstTooHighRank(time, availableMana);
+    let firstTooHighRank = this.firstTooHighRank(time, availableMana, spell);
 
-    // To avoid using spell of rank 1 and 2 that are absolute garbage
-    if (firstTooHighRank < 4) {
-      firstTooHighRank = 4;
-    }
+    let highRankSpell: Spell;
+    let lowRankSpell: Spell;
 
-    const healingWaveHighRank = HEALING_WAVE[firstTooHighRank - 1];
-    const healingWaveLowRank = HEALING_WAVE[firstTooHighRank - 2];
     // Brute force since I'm not smart enough
     // Determine maximum number of iteration to consider
-    const maxIteration = Math.max(
-      time / (healingWaveHighRank.duration - IMPROVED_HEALING_WAVE_TIME_GAIN),
-      time / (healingWaveLowRank.duration - IMPROVED_HEALING_WAVE_TIME_GAIN)
-    );
+    let maxIteration: number;
+
+    let lowRankDuration: number;
+    let highRankDuration: number;
+
+    if ((spell === 'healing-wave')) {
+      highRankSpell = HEALING_WAVE[firstTooHighRank - 1];
+      lowRankSpell = HEALING_WAVE[firstTooHighRank - 2];
+
+      maxIteration = Math.max(
+        time / (highRankSpell.duration - IMPROVED_HEALING_WAVE_TIME_GAIN),
+        time / (lowRankSpell.duration - IMPROVED_HEALING_WAVE_TIME_GAIN)
+      );
+
+      lowRankDuration = lowRankSpell.duration - IMPROVED_HEALING_WAVE_TIME_GAIN;
+      highRankDuration =
+        highRankSpell.duration - IMPROVED_HEALING_WAVE_TIME_GAIN;
+    } else if ((spell === 'chain-heal')) {
+      highRankSpell = CHAIN_HEAL[firstTooHighRank - 1];
+      lowRankSpell = CHAIN_HEAL[firstTooHighRank - 2];
+
+      maxIteration = Math.max(
+        time / (highRankSpell.duration - IMPROVED_HEALING_WAVE_TIME_GAIN),
+        time / (lowRankSpell.duration - IMPROVED_HEALING_WAVE_TIME_GAIN)
+      );
+
+      lowRankDuration = lowRankSpell.duration;
+      highRankDuration = highRankSpell.duration;
+    }
 
     let maxHeal = 0;
     let highIterationSelected;
@@ -138,35 +207,26 @@ export class Utils {
       for (let lowIteration = 0; lowIteration < maxIteration; lowIteration++) {
         // Compute only if it's not taking too much time and not takes too much mana
         if (
-          lowIteration *
-            (healingWaveLowRank.duration - IMPROVED_HEALING_WAVE_TIME_GAIN) +
-            highIteration *
-              (healingWaveHighRank.duration -
-                IMPROVED_HEALING_WAVE_TIME_GAIN) <=
+          lowIteration * lowRankDuration + highIteration * highRankDuration <=
             time &&
           lowIteration *
-            (healingWaveLowRank.manaCost -
-              healingWaveLowRank.manaCost * TIDAL_FOCUS_MANA_REDUCTION) +
+            (lowRankSpell.manaCost -
+              lowRankSpell.manaCost * TIDAL_FOCUS_MANA_REDUCTION) +
             highIteration *
-              (healingWaveHighRank.manaCost -
-                healingWaveHighRank.manaCost * TIDAL_FOCUS_MANA_REDUCTION) <=
+              (highRankSpell.manaCost -
+                highRankSpell.manaCost * TIDAL_FOCUS_MANA_REDUCTION) <=
             availableMana
         ) {
           const healOutput =
             highIteration *
               this.averageHeal(
                 spell,
-                healingWaveHighRank.rank,
+                highRankSpell.rank,
                 healBonus,
                 critChance
               ) +
             lowIteration *
-              this.averageHeal(
-                spell,
-                healingWaveLowRank.rank,
-                healBonus,
-                critChance
-              );
+              this.averageHeal(spell, lowRankSpell.rank, healBonus, critChance);
           if (healOutput > maxHeal) {
             maxHeal = healOutput;
             highIterationSelected = highIteration;
@@ -180,7 +240,7 @@ export class Utils {
       maxHeal: maxHeal,
       highIterationSelected: highIterationSelected,
       firstTooHighRank: firstTooHighRank,
-      lowIterationSelected: lowIterationSelected
-    } 
+      lowIterationSelected: lowIterationSelected,
+    };
   }
 }

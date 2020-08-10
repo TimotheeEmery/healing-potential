@@ -8,7 +8,8 @@ import { Utils } from 'src/app/shared/utils';
 })
 export class ShamanCalculationComponent implements OnInit {
   @Input() time: number = 120;
-  maxMana: number = 8000;
+  @Input() id: string;
+  @Input() maxMana: number = 8000;
   mp5: number = 30;
   spell: string = 'healing-wave';
   healBonus: number = 500;
