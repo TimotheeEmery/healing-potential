@@ -109,6 +109,10 @@ export class ShamanCalculationComponent implements OnInit {
     ).maxHeal;
     this.criticalStrikeValue =
       (additionalCriticalStrike - this.healingPotential) / 3;
+
+    this.baseSelect = this.mp5Value;
+    this.compareToSelect = this.healBonusValue;
+    this.compare();
   }
 
   addIntel(): void {

@@ -1,15 +1,39 @@
-// /* Chrome, Safari, Edge, Opera */
-// input::-webkit-outer-spin-button,
-// input::-webkit-inner-spin-button {
-//   -webkit-appearance: none;
-//   margin: 0;
-// }
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
 
-// /* Firefox */
-// input[type=number] {
-//   -moz-appearance: textfield;
-// }
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
 
 input[type=radio]{
     margin-right: 5px;
+}
+
+.input-group{
+    border-radius: 3px;
+    border: solid 1px;
+}
+
+.input-group-text{
+    border-radius: 0;
+}
+
+select.form-control.right{
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+select.form-control.left{
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.main-result{
+    font-size: 1.5em;
+    font-weight: bold;
 }
