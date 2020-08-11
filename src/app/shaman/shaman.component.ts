@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CRITICAL_STRIKE_BONUS } from 'src/app/shared/constants';
+import { Profile } from 'src/app/shared/models/profile';
 
 @Component({
   selector: 'app-shaman',
@@ -9,6 +9,5 @@ import { CRITICAL_STRIKE_BONUS } from 'src/app/shared/constants';
 export class ShamanComponent implements OnInit {
   constructor() {}
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 }

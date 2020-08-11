@@ -1,4 +1,4 @@
-import { Spell } from 'src/app/shared/spell';
+import { Spell } from 'src/app/shared/models/spell';
 
 const CRITICAL_STRIKE_BONUS = 0.5;
 const NORMAL_DURATION = 3.5;
