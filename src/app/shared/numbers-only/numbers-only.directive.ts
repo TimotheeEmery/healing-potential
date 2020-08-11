@@ -5,11 +5,10 @@ export class NumbersOnlyDirective {
   constructor(private el: ElementRef) {}
 
   @HostListener('input', ['$event']) onInputChange() {
-    const initalValue = this.el.nativeElement.value;
     // Removes non number or point characters
-    this.el.nativeElement.value = initalValue.replace(/[^0-9.]*/gm, '');
-
-    // Removes second decimal point
-    this.el.nativeElement.value = initalValue.replace(/(\..*)(\.)/gm, '$1');
+    // And removes second decimal point
+    this.el.nativeElement.value = this.el.nativeElement.value
+      .replace(/[^0-9.]*/g, '')
+      .replace(/(\..*)(\.)/g, '$1');
   }
 }

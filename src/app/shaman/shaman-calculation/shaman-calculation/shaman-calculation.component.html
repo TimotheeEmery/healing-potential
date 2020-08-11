@@ -21,7 +21,7 @@
     <input
       class="input-group"
       appNumbersOnly
-      [(ngModel)]="maxMana"
+      [(ngModel)]="profile.maxMana"
       type="text"
       placeholder="Enter Mana"
     />
@@ -35,7 +35,7 @@
     <input
       class="input-group"
       appNumbersOnly
-      [(ngModel)]="mp5"
+      [(ngModel)]="profile.mp5"
       type="text"
       placeholder="Enter Mp5"
     />
@@ -49,7 +49,7 @@
     <input
       class="input-group"
       appNumbersOnly
-      [(ngModel)]="healBonus"
+      [(ngModel)]="profile.healBonus"
       type="text"
       placeholder="Enter Heal bonus"
     />
@@ -63,7 +63,7 @@
     <input
       class="input-group"
       appNumbersOnly
-      [(ngModel)]="criticalRate"
+      [(ngModel)]="profile.criticalRate"
       type="text"
       placeholder="Enter Critical chance"
     />
@@ -72,19 +72,103 @@
 <hr />
 <div class="row">
   <div class="col">
-    <button class="btn btn-success" (click)="addIntel()">Apply +Intel</button>
-  </div>
-  <div class="col">
-    <input
-      class="input-group"
-      appNumbersOnly
-      [(ngModel)]="addIntelNumber"
-      type="number"
-      min="0"
-      placeholder="Intel to add"
-    />
+    <div class="input-group">
+      <div class="input-group-prepend green-bg">
+        <button
+          placement="top"
+          [ngbTooltip]="applyIntelTooltip"
+          [openDelay]="300"
+          class="btn btn-success"
+          type="button"
+          (click)="addIntel()"
+        >
+          Apply Intel:
+        </button>
+      </div>
+      <input
+        appNumbersOnly
+        [(ngModel)]="addIntelNumber"
+        type="number"
+        class="form-control"
+        min="0"
+        placeholder="Intel to add"
+      />
+    </div>
   </div>
 </div>
+<hr />
+<h5>
+  <i
+    class="fa fa-question-circle"
+    placement="top"
+    [ngbTooltip]="profileTooltip"
+  ></i>
+  Apply profile:
+</h5>
+<div class="row">
+  <div class="col">
+    <button
+      placement="top"
+      [ngbTooltip]="t0Tooltip"
+      [openDelay]="300"
+      class="btn btn-success mr-1"
+      (click)="applyProfile(t0Profile)"
+    >
+      T0
+    </button>
+    <button
+      placement="top"
+      [ngbTooltip]="t1Tooltip"
+      [openDelay]="300"
+      class="btn btn-success mr-1"
+      (click)="applyProfile(t1Profile)"
+    >
+      T1
+    </button>
+    <button
+      placement="top"
+      [ngbTooltip]="t2Tooltip"
+      [openDelay]="300"
+      class="btn btn-success mr-1"
+      (click)="applyProfile(t2Profile)"
+    >
+      T2
+    </button>
+  </div>
+</div>
+<!-- <hr />
+<h5>
+  <i
+    class="fa fa-question-circle"
+    placement="top"
+    [ngbTooltip]="modifierTooltip"
+  ></i>
+  Modifiers:
+</h5>
+<div class="form-check">
+  <input
+    type="checkbox"
+    [id]="id + '-arcane'"
+    [(ngModel)]="arcaneIntelligence"
+    class="form-check-input"
+  />
+  <label class="form-check-label" [for]="id + '-arcane'">
+    Arcane Intelligence
+  </label>
+</div>
+
+<div class="form-check">
+  <input
+    type="checkbox"
+    [id]="id + '-mark'"
+    [(ngModel)]="markOfTheWild"
+    class="form-check-input"
+  />
+  <label class="form-check-label" [for]="id + '-mark'">
+    Mark of the Wild
+  </label>
+</div> -->
+
 <hr />
 <div class="row">
   <div class="col">
@@ -108,7 +192,7 @@
 </div>
 <div class="row">
   <div class="col d-flex justify-content-center">
-    <button class="btn-lg btn-primary" (click)="onCompute()">
+    <button class="btn-lg btn-primary mt-3 mb-3" (click)="onCompute()">
       Compute score
     </button>
   </div>
@@ -120,7 +204,7 @@
     >
   </div>
 </div>
-<hr style="border-top: 2px solid;"/>
+<hr style="border-top: 2px solid;" />
 <h5>Detailed results:</h5>
 <div class="row">
   <div class="col">

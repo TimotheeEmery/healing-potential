@@ -1,5 +1,5 @@
 import { Utils } from './utils';
-import { Spell } from 'src/app/shared/spell';
+import { Spell } from 'src/app/shared/models/spell';
 
 fdescribe('Utils', () => {
   describe('Utils level penalty', () => {
