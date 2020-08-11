@@ -3,7 +3,7 @@
     <label>Fight duration [s]:</label>
   </div>
   <div class="col">
-    <input appNumbersOnly [(ngModel)]="time" type="text" />
+    <input class="input-group" appNumbersOnly [(ngModel)]="time" type="text" />
   </div>
 </div>
 <div class="row">
@@ -11,7 +11,12 @@
     <label>Maximum mana:</label>
   </div>
   <div class="col">
-    <input appNumbersOnly [(ngModel)]="maxMana" type="text" />
+    <input
+      class="input-group"
+      appNumbersOnly
+      [(ngModel)]="maxMana"
+      type="text"
+    />
   </div>
 </div>
 <div class="row">
@@ -19,7 +24,7 @@
     <label>Mp5:</label>
   </div>
   <div class="col">
-    <input appNumbersOnly [(ngModel)]="mp5" type="text" />
+    <input class="input-group" appNumbersOnly [(ngModel)]="mp5" type="text" />
   </div>
 </div>
 <div class="row">
@@ -27,15 +32,25 @@
     <label>Heal bonus:</label>
   </div>
   <div class="col">
-    <input appNumbersOnly [(ngModel)]="healBonus" type="text" />
+    <input
+      class="input-group"
+      appNumbersOnly
+      [(ngModel)]="healBonus"
+      type="text"
+    />
   </div>
 </div>
 <div class="row">
   <div class="col">
-    <label>Critical rate [%]</label>
+    <label>Critical rate [%]:</label>
   </div>
   <div class="col">
-    <input appNumbersOnly [(ngModel)]="criticalRate" type="text" />
+    <input
+      class="input-group"
+      appNumbersOnly
+      [(ngModel)]="criticalRate"
+      type="text"
+    />
   </div>
 </div>
 <hr />
@@ -45,7 +60,7 @@
   </div>
   <div class="col">
     <input
-      class="col"
+      class="input-group"
       appNumbersOnly
       [(ngModel)]="addIntelNumber"
       type="number"
@@ -76,9 +91,9 @@
   </div>
 </div>
 <div class="row">
-  <button class="col btn-primary" (click)="onCompute()">
-    Compute score
-  </button>
+  <div class="col">
+    <button class="btn-primary" (click)="onCompute()">Compute score</button>
+  </div>
   <div class="col">
     <span>Healing potential: {{ healingPotential | number: "1.1-2" }}</span>
     <br />
@@ -93,33 +108,59 @@
   <span class="col"></span>
 </div>
 
-<div class="row">Intel value: {{ intelValue | number: "1.1-2" }}</div>
-<div class="row">Mp5 value: {{ mp5Value | number: "1.1-2" }}</div>
-<div class="row">Heal bonus value: {{ healBonusValue | number: "1.1-2" }}</div>
 <div class="row">
-  Critical strike value: {{ criticalStrikeValue | number: "1.1-2" }}
+  <div class="col">Intel value: {{ intelValue | number: "1.1-2" }}</div>
 </div>
-<div class="row">Mana value: {{ manaValue | number: "1.1-2" }}</div>
 <div class="row">
-  <label>Relative value:</label>
+  <div class="col">Mp5 value: {{ mp5Value | number: "1.1-2" }}</div>
+</div>
+<div class="row">
+  <div class="col">
+    Heal bonus value: {{ healBonusValue | number: "1.1-2" }}
+  </div>
+</div>
+<div class="row">
+  <div class="col">
+    Critical strike value: {{ criticalStrikeValue | number: "1.1-2" }}
+  </div>
+</div>
+<div class="row">
+  <div class="col">Mana value: {{ manaValue | number: "1.1-2" }}</div>
+</div>
+<div class="row">
+  <label class="col">Relative value:</label>
 </div>
 <div class="row">
   <div class="col text-center">
-    <select (change)="compare()" [(ngModel)]="baseSelect" id="base">
-      <option [ngValue]="intelValue" selected>Intel</option>
-      <option [ngValue]="mp5Value">Mp5</option>
-      <option [ngValue]="healBonusValue">Heal bonus</option>
-      <option [ngValue]="manaValue">Mana</option>
-      <option [ngValue]="criticalStrikeValue">Critical strike</option>
-    </select>
-    :
-    <select (change)="compare()" [(ngModel)]="compareToSelect" id="comparison">
-      <option [ngValue]="intelValue">Intel</option>
-      <option [ngValue]="mp5Value">Mp5</option>
-      <option [ngValue]="healBonusValue">Heal bonus</option>
-      <option [ngValue]="manaValue">Mana</option>
-      <option [ngValue]="criticalStrikeValue">Critical strike</option>
-    </select>
+    <div class="row">
+      <select
+        class="form-control col ml-3"
+        (change)="compare()"
+        [(ngModel)]="baseSelect"
+        id="base"
+      >
+        <option [ngValue]="intelValue" selected>Intel</option>
+        <option [ngValue]="mp5Value">Mp5</option>
+        <option [ngValue]="healBonusValue">Heal bonus</option>
+        <option [ngValue]="manaValue">Mana</option>
+        <option [ngValue]="criticalStrikeValue">Critical strike</option>
+      </select>
+      <div class="input-group-append">
+        <span class="input-group-text">:</span>
+      </div>
+      <select
+        class="form-control col mr-3"
+        (change)="compare()"
+        [(ngModel)]="compareToSelect"
+        id="comparison"
+      >
+        <option [ngValue]="intelValue">Intel</option>
+        <option [ngValue]="mp5Value">Mp5</option>
+        <option [ngValue]="healBonusValue">Heal bonus</option>
+        <option [ngValue]="manaValue">Mana</option>
+        <option [ngValue]="criticalStrikeValue">Critical strike</option>
+      </select>
+    </div>
   </div>
 </div>
 <div class="row">
