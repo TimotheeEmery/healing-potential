@@ -51,51 +51,42 @@ export class Utils {
 
   // HP healed after applying all modifiers
   static averageHeal(
-    spell: string,
+    spellName: string,
     rank: number,
     healBonus: number,
     critChance: number
   ): number {
-    if (spell === 'healing-wave') {
-      const healingWave = HEALING_WAVE[rank - 1];
-
-      const averageHeal =
-        ((healingWave.minHeal + healingWave.maxHeal) / 2) * PURIFICATION;
-
-      const healBonusAfterModifiers =
-        healBonus *
-        this.levelPenalty(healingWave.level) *
-        this.durationPenalty(healingWave.duration);
-
-      const healWithoutCrit = averageHeal + healBonusAfterModifiers;
-
-      return (
-        healWithoutCrit +
-        healWithoutCrit *
-          (CRITICAL_STRIKE_BONUS * (critChance + TIDAL_MASTERY_CRIT))
-      );
-    } else if (spell === 'chain-heal') {
-      const chainHeal = CHAIN_HEAL[rank - 1];
-
-      const averageHeal =
-        ((chainHeal.minHeal + chainHeal.maxHeal) / 2) * PURIFICATION;
-
-      const healBonusAfterModifiers =
-        healBonus *
-        this.levelPenalty(chainHeal.level) *
-        this.durationPenalty(chainHeal.duration);
-
-      const healWithoutCrit = averageHeal + healBonusAfterModifiers;
-      const healWithCrit =
-        healWithoutCrit +
-        healWithoutCrit *
-          (CRITICAL_STRIKE_BONUS * (critChance + TIDAL_MASTERY_CRIT));
-
-      // Taking into account T2 bonuses
-      return healWithCrit * 2.0725;
+    let spell: Spell;
+    if (spellName === 'healing-wave') {
+      spell = HEALING_WAVE[rank - 1];
+    } else if (spellName === 'chain-heal') {
+      spell = CHAIN_HEAL[rank - 1];
     }
 
-    return -1;
+    if (spell) {
+      const averageHeal = ((spell.minHeal + spell.maxHeal) / 2) * PURIFICATION;
+
+      const healBonusAfterModifiers =
+        healBonus *
+        this.levelPenalty(spell.level) *
+        this.durationPenalty(spell.duration);
+
+      const healWithoutCrit = averageHeal + healBonusAfterModifiers;
+      let healWithCrit =
+        healWithoutCrit +
+        healWithoutCrit *
+          CRITICAL_STRIKE_BONUS *
+          Math.max(critChance + TIDAL_MASTERY_CRIT, 1);
+
+      if (spellName === 'chain-heal') {
+        // Taking into account T2 bonuses
+        healWithCrit *= 2.0725;
+      }
+
+      return healWithCrit;
+    }
+
+    return 0;
   }
 
   // How much mana is spent if we want to cast this spell non-stop
@@ -114,7 +105,7 @@ export class Utils {
         (chainHeal.manaCost - chainHeal.manaCost * TIDAL_FOCUS_MANA_REDUCTION)
       );
     }
-    return -1;
+    return 0;
   }
 
   // Look at which is the first rank that doesn't allow to cast the spell non-stop
@@ -174,7 +165,7 @@ export class Utils {
     let lowRankDuration: number;
     let highRankDuration: number;
 
-    if ((spell === 'healing-wave')) {
+    if (spell === 'healing-wave') {
       highRankSpell = HEALING_WAVE[firstTooHighRank - 1];
       lowRankSpell = HEALING_WAVE[firstTooHighRank - 2];
 
@@ -186,7 +177,7 @@ export class Utils {
       lowRankDuration = lowRankSpell.duration - IMPROVED_HEALING_WAVE_TIME_GAIN;
       highRankDuration =
         highRankSpell.duration - IMPROVED_HEALING_WAVE_TIME_GAIN;
-    } else if ((spell === 'chain-heal')) {
+    } else if (spell === 'chain-heal') {
       highRankSpell = CHAIN_HEAL[firstTooHighRank - 1];
       lowRankSpell = CHAIN_HEAL[firstTooHighRank - 2];
 
