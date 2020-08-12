@@ -216,23 +216,54 @@
   </div>
 </div>
 <div class="row">
-  <div class="col">Intel value: {{ intelValue | number: "1.1-2" }}</div>
-</div>
-<div class="row">
-  <div class="col">Mp5 value: {{ mp5Value | number: "1.1-2" }}</div>
+  <div class="col">
+    <i
+      class="fa fa-question-circle"
+      placement="top"
+      [ngbTooltip]="intelValueTooltip"
+    ></i>
+    Intel value: {{ intelValue | number: "1.1-2" }}
+  </div>
 </div>
 <div class="row">
   <div class="col">
+    <i
+      class="fa fa-question-circle"
+      placement="top"
+      [ngbTooltip]="mp5ValueTooltip"
+    ></i>
+    Mp5 value: {{ mp5Value | number: "1.1-2" }}
+  </div>
+</div>
+<div class="row">
+  <div class="col">
+    <i
+      class="fa fa-question-circle"
+      placement="top"
+      [ngbTooltip]="healBonusValueTooltip"
+    ></i>
     Heal bonus value: {{ healBonusValue | number: "1.1-2" }}
   </div>
 </div>
 <div class="row">
   <div class="col">
+    <i
+      class="fa fa-question-circle"
+      placement="top"
+      [ngbTooltip]="criticalStrikeValueTooltip"
+    ></i>
     Critical strike value: {{ criticalStrikeValue | number: "1.1-2" }}
   </div>
 </div>
 <div class="row">
-  <div class="col">Mana value: {{ manaValue | number: "1.1-2" }}</div>
+  <div class="col">
+    <i
+      class="fa fa-question-circle"
+      placement="top"
+      [ngbTooltip]="manaValueTooltip"
+    ></i>
+    Mana value: {{ manaValue | number: "1.1-2" }}
+  </div>
 </div>
 <br />
 <div class="row">

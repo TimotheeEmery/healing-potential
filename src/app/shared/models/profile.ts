@@ -6,4 +6,3 @@ export class Profile {
     public criticalRate: string
   ) {}
 }
-

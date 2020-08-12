@@ -2,7 +2,6 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Utils } from 'src/app/shared/utils';
 import { Profile } from 'src/app/shared/models/profile';
 
-
 @Component({
   selector: 'app-shaman-calculation',
   templateUrl: './shaman-calculation.component.html',
@@ -29,10 +28,10 @@ export class ShamanCalculationComponent implements OnInit {
   arcaneIntelligence: boolean; // 31 intel
   markOfTheWild: boolean; // 12 stats
   improvedMarkOfTheWild: boolean; // 12 stats * 35% = 16 stats (?)
-  darkMoonFaire: boolean // Sombrelune, 9 intel
+  darkMoonFaire: boolean; // Sombrelune, 9 intel
   // Ony/Nef 10% crit.
   // Rend ?? mp5
-  // Zandalar spirit, 15% stats (after other modifiers?) 
+  // Zandalar spirit, 15% stats (after other modifiers?)
   // HT spell crit. 3%
   // Using totem
   // Mana wave totem up
@@ -66,6 +65,11 @@ export class ShamanCalculationComponent implements OnInit {
   applyIntelTooltip = `Click on the button to apply the informed intel value, it will affect maximum mana and critical chance`;
   profileTooltip = `Click on a profile to set those stats above`;
   modifierTooltip = `Check what modifiers should apply during calculation`;
+  intelValueTooltip = `Average heal increase per intel during the next +20 intel`;
+  mp5ValueTooltip = `Average heal increase per mp5 during the next +10 mp5`;
+  healBonusValueTooltip = `Average heal increase per heal bonus during the next +50 heal bonus`;
+  criticalStrikeValueTooltip = `Average heal increase per critical strike % during the next +5%`;
+  manaValueTooltip = `Average heal increase per mana during the next +400 mana`;
 
   constructor() {}
 
@@ -102,13 +106,13 @@ export class ShamanCalculationComponent implements OnInit {
     // Intel Value
     const additionalHealingIntel = Utils.healOutput(
       +this.time,
-      +this.profile.maxMana + 10 * 15.75,
+      +this.profile.maxMana + 20 * 15.75,
       +this.profile.mp5,
       this.spell,
       +this.profile.healBonus,
       (+this.profile.criticalRate + 10 / 59.2) / 100
     ).maxHeal;
-    this.intelValue = (additionalHealingIntel - this.healingPotential) / 10;
+    this.intelValue = (additionalHealingIntel - this.healingPotential) / 20;
 
     // Heal Bonus Value
     const additionalHealingHealBonus = Utils.healOutput(
@@ -116,22 +120,22 @@ export class ShamanCalculationComponent implements OnInit {
       +this.profile.maxMana,
       +this.profile.mp5,
       this.spell,
-      +this.profile.healBonus + 20,
+      +this.profile.healBonus + 50,
       +this.profile.criticalRate / 100
     ).maxHeal;
     this.healBonusValue =
-      (additionalHealingHealBonus - this.healingPotential) / 20;
+      (additionalHealingHealBonus - this.healingPotential) / 50;
 
     // Mana value
     const additionalHealingMana = Utils.healOutput(
       +this.time,
-      +this.profile.maxMana + 150,
+      +this.profile.maxMana + 400,
       +this.profile.mp5,
       this.spell,
       +this.profile.healBonus,
       +this.profile.criticalRate / 100
     ).maxHeal;
-    this.manaValue = (additionalHealingMana - this.healingPotential) / 150;
+    this.manaValue = (additionalHealingMana - this.healingPotential) / 400;
 
     // Critical strike value
     const additionalCriticalStrike = Utils.healOutput(
@@ -140,10 +144,10 @@ export class ShamanCalculationComponent implements OnInit {
       +this.profile.mp5,
       this.spell,
       +this.profile.healBonus,
-      (+this.profile.criticalRate + 3) / 100
+      (+this.profile.criticalRate + 5) / 100
     ).maxHeal;
     this.criticalStrikeValue =
-      (additionalCriticalStrike - this.healingPotential) / 3;
+      (additionalCriticalStrike - this.healingPotential) / 5;
 
     this.baseSelect = this.mp5Value;
     this.compareToSelect = this.healBonusValue;

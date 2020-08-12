@@ -1,40 +1,13 @@
 import { Spell } from 'src/app/shared/models/spell';
-
-const CRITICAL_STRIKE_BONUS = 0.5;
-const NORMAL_DURATION = 3.5;
-const MINIMUM_LEVEL = 20;
-const MINIMUM_LEVEL_PENALTY = 0.0375;
-
-// Talents
-const IMPROVED_HEALING_WAVE_TIME_GAIN = 0.5;
-const TIDAL_FOCUS_MANA_REDUCTION = 0.05;
-const TIDAL_MASTERY_CRIT = 0.05;
-const PURIFICATION = 1.1;
-
-const HEALING_WAVE: Spell[] = [
-  new Spell(1, 1, 1.5, 25, 34, 44),
-  new Spell(2, 6, 2, 45, 64, 78),
-  new Spell(3, 12, 2.5, 80, 129, 155),
-  new Spell(4, 18, 3, 155, 268, 316),
-  new Spell(5, 24, 3, 200, 376, 440),
-  new Spell(6, 32, 3, 265, 536, 622),
-  new Spell(7, 40, 3, 340, 740, 854),
-  new Spell(8, 48, 3, 440, 1017, 1167),
-  new Spell(9, 56, 3, 560, 1367, 1561),
-  new Spell(10, 60, 3, 620, 1620, 1850),
-];
-
-const CHAIN_HEAL: Spell[] = [
-  new Spell(1, 40, 2.5, 260, 320, 368),
-  new Spell(2, 46, 2.5, 315, 405, 465),
-  new Spell(3, 54, 2.5, 405, 551, 629),
-];
+import { Result } from 'src/app/shared/models/result';
+import * as ShamanConstants from 'src/app/shared/shaman.constants';
+import * as HealingConstants from 'src/app/shared/healing.constants';
 
 export class Utils {
   // If the spell is below level 20, there is a penalty
   static levelPenalty(level: number): number {
-    if (level < MINIMUM_LEVEL) {
-      return 1 - (MINIMUM_LEVEL - level) * MINIMUM_LEVEL_PENALTY;
+    if (level < HealingConstants.MINIMUM_LEVEL) {
+      return 1 - (HealingConstants.MINIMUM_LEVEL - level) * HealingConstants.MINIMUM_LEVEL_PENALTY;
     } else {
       return 1;
     }
@@ -42,8 +15,8 @@ export class Utils {
 
   // If the base cast-time of a spell is faster than 3.5 seconds, there is a penalty
   static durationPenalty(duration: number): number {
-    if (duration < NORMAL_DURATION) {
-      return duration / NORMAL_DURATION;
+    if (duration < HealingConstants.NORMAL_DURATION) {
+      return duration / HealingConstants.NORMAL_DURATION;
     } else {
       return 1;
     }
@@ -58,13 +31,13 @@ export class Utils {
   ): number {
     let spell: Spell;
     if (spellName === 'healing-wave') {
-      spell = HEALING_WAVE[rank - 1];
+      spell = ShamanConstants.HEALING_WAVE[rank - 1];
     } else if (spellName === 'chain-heal') {
-      spell = CHAIN_HEAL[rank - 1];
+      spell = ShamanConstants.CHAIN_HEAL[rank - 1];
     }
 
     if (spell) {
-      const averageHeal = ((spell.minHeal + spell.maxHeal) / 2) * PURIFICATION;
+      const averageHeal = ((spell.minHeal + spell.maxHeal) / 2) * ShamanConstants.PURIFICATION;
 
       const healBonusAfterModifiers =
         healBonus *
@@ -75,8 +48,8 @@ export class Utils {
       let healWithCrit =
         healWithoutCrit +
         healWithoutCrit *
-          CRITICAL_STRIKE_BONUS *
-          Math.max(critChance + TIDAL_MASTERY_CRIT, 1);
+          HealingConstants.CRITICAL_STRIKE_BONUS *
+          Math.min(critChance + ShamanConstants.TIDAL_MASTERY_CRIT, 1);
 
       if (spellName === 'chain-heal') {
         // Taking into account T2 bonuses
@@ -92,17 +65,17 @@ export class Utils {
   // How much mana is spent if we want to cast this spell non-stop
   static manaDrain(time: number, spell: string, rank: number): number {
     if (spell === 'healing-wave') {
-      const healingWave = HEALING_WAVE[rank - 1];
+      const healingWave = ShamanConstants.HEALING_WAVE[rank - 1];
       return (
-        (time / (healingWave.duration - IMPROVED_HEALING_WAVE_TIME_GAIN)) *
+        (time / (healingWave.duration - ShamanConstants.IMPROVED_HEALING_WAVE_TIME_GAIN)) *
         (healingWave.manaCost -
-          healingWave.manaCost * TIDAL_FOCUS_MANA_REDUCTION)
+          healingWave.manaCost * ShamanConstants.TIDAL_FOCUS_MANA_REDUCTION)
       );
     } else if (spell === 'chain-heal') {
-      const chainHeal = CHAIN_HEAL[rank - 1];
+      const chainHeal = ShamanConstants.CHAIN_HEAL[rank - 1];
       return (
         (time / chainHeal.duration) *
-        (chainHeal.manaCost - chainHeal.manaCost * TIDAL_FOCUS_MANA_REDUCTION)
+        (chainHeal.manaCost - chainHeal.manaCost * ShamanConstants.TIDAL_FOCUS_MANA_REDUCTION)
       );
     }
     return 0;
@@ -116,9 +89,9 @@ export class Utils {
   ): number {
     let highestRank;
     if (spell === 'healing-wave') {
-      highestRank = HEALING_WAVE.length;
+      highestRank = ShamanConstants.HEALING_WAVE.length;
     } else if (spell === 'chain-heal') {
-      highestRank = CHAIN_HEAL.length;
+      highestRank = ShamanConstants.CHAIN_HEAL.length;
     }
 
     let firstTooHighRank = highestRank;
@@ -142,6 +115,7 @@ export class Utils {
     return firstTooHighRank;
   }
 
+  // Compute how much heal is provided during the entire fight
   // Expects than downranking is always more mana efficient (which is not true depending on the heal bonus)
   static healOutput(
     time: number,
@@ -166,30 +140,31 @@ export class Utils {
     let highRankDuration: number;
 
     if (spell === 'healing-wave') {
-      highRankSpell = HEALING_WAVE[firstTooHighRank - 1];
-      lowRankSpell = HEALING_WAVE[firstTooHighRank - 2];
+      highRankSpell = ShamanConstants.HEALING_WAVE[firstTooHighRank - 1];
+      lowRankSpell = ShamanConstants.HEALING_WAVE[firstTooHighRank - 2];
 
       maxIteration = Math.max(
-        time / (highRankSpell.duration - IMPROVED_HEALING_WAVE_TIME_GAIN),
-        time / (lowRankSpell.duration - IMPROVED_HEALING_WAVE_TIME_GAIN)
+        time / (highRankSpell.duration - ShamanConstants.IMPROVED_HEALING_WAVE_TIME_GAIN),
+        time / (lowRankSpell.duration - ShamanConstants.IMPROVED_HEALING_WAVE_TIME_GAIN)
       );
 
-      lowRankDuration = lowRankSpell.duration - IMPROVED_HEALING_WAVE_TIME_GAIN;
+      lowRankDuration = lowRankSpell.duration - ShamanConstants.IMPROVED_HEALING_WAVE_TIME_GAIN;
       highRankDuration =
-        highRankSpell.duration - IMPROVED_HEALING_WAVE_TIME_GAIN;
+        highRankSpell.duration - ShamanConstants.IMPROVED_HEALING_WAVE_TIME_GAIN;
     } else if (spell === 'chain-heal') {
-      highRankSpell = CHAIN_HEAL[firstTooHighRank - 1];
-      lowRankSpell = CHAIN_HEAL[firstTooHighRank - 2];
+      highRankSpell = ShamanConstants.CHAIN_HEAL[firstTooHighRank - 1];
+      lowRankSpell = ShamanConstants.CHAIN_HEAL[firstTooHighRank - 2];
 
       maxIteration = Math.max(
-        time / (highRankSpell.duration - IMPROVED_HEALING_WAVE_TIME_GAIN),
-        time / (lowRankSpell.duration - IMPROVED_HEALING_WAVE_TIME_GAIN)
+        time / (highRankSpell.duration - ShamanConstants.IMPROVED_HEALING_WAVE_TIME_GAIN),
+        time / (lowRankSpell.duration - ShamanConstants.IMPROVED_HEALING_WAVE_TIME_GAIN)
       );
 
       lowRankDuration = lowRankSpell.duration;
       highRankDuration = highRankSpell.duration;
     }
 
+    // Compute maximum heal candidates
     let maxHeal = 0;
     let highIterationSelected;
     let lowIterationSelected;
@@ -202,10 +177,10 @@ export class Utils {
             time &&
           lowIteration *
             (lowRankSpell.manaCost -
-              lowRankSpell.manaCost * TIDAL_FOCUS_MANA_REDUCTION) +
+              lowRankSpell.manaCost * ShamanConstants.TIDAL_FOCUS_MANA_REDUCTION) +
             highIteration *
               (highRankSpell.manaCost -
-                highRankSpell.manaCost * TIDAL_FOCUS_MANA_REDUCTION) <=
+                highRankSpell.manaCost * ShamanConstants.TIDAL_FOCUS_MANA_REDUCTION) <=
             availableMana
         ) {
           const healOutput =
@@ -227,11 +202,13 @@ export class Utils {
       }
     }
 
-    return {
-      maxHeal: maxHeal,
-      highIterationSelected: highIterationSelected,
-      firstTooHighRank: firstTooHighRank,
-      lowIterationSelected: lowIterationSelected,
-    };
+    const result = new Result(
+      maxHeal,
+      highIterationSelected,
+      firstTooHighRank,
+      lowIterationSelected
+    );
+
+    return result;
   }
 }
