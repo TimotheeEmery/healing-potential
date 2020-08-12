@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Utils } from 'src/app/shared/utils';
 import { Profile } from 'src/app/shared/models/profile';
 
+
 @Component({
   selector: 'app-shaman-calculation',
   templateUrl: './shaman-calculation.component.html',
@@ -28,6 +29,18 @@ export class ShamanCalculationComponent implements OnInit {
   arcaneIntelligence: boolean; // 31 intel
   markOfTheWild: boolean; // 12 stats
   improvedMarkOfTheWild: boolean; // 12 stats * 35% = 16 stats (?)
+  darkMoonFaire: boolean // Sombrelune, 9 intel
+  // Ony/Nef 10% crit.
+  // Rend ?? mp5
+  // Zandalar spirit, 15% stats (after other modifiers?) 
+  // HT spell crit. 3%
+  // Using totem
+  // Mana wave totem up
+  // Potions, major, excellent, superior
+  // Demonic/Dark rune
+  // Lutjan, 8 mp5
+  // Bloodmage potion, 12 mp5
+  // Brilliant oil
 
   // Results
   healingPotential: number;
