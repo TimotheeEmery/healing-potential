@@ -9,11 +9,9 @@ import { Profile } from 'src/app/shared/models/profile';
 })
 export class ShamanCalculationComponent implements OnInit {
   // Variables
-  defaultProfile = new Profile('8000', '30', '500', '10');
-
   @Input() id: string;
   @Input() time: number;
-  @Input() profile = this.defaultProfile;
+  @Input() profile = new Profile('8000', '30', '700', '10');
 
   spell = 'healing-wave';
 
@@ -21,11 +19,11 @@ export class ShamanCalculationComponent implements OnInit {
 
   // Profiles
   t0Profile = new Profile('6000', '10', '300', '5');
-  t1Profile = new Profile('7000', '20', '450', '7');
-  t2Profile = new Profile('8000', '30', '600', '10');
+  t1Profile = new Profile('7000', '20', '500', '7');
+  t2Profile = new Profile('8000', '30', '700', '10');
 
   // Modifiers
-  arcaneIntelligence: boolean; // 31 intel
+  arcaneIntellect: boolean; // 31 intel
   markOfTheWild: boolean; // 12 stats
   improvedMarkOfTheWild: boolean; // 12 stats * 35% = 16 stats (?)
   darkMoonFaire: boolean; // Sombrelune, 9 intel
@@ -87,13 +85,35 @@ It will affect maximum mana and critical chance`;
   }
 
   onCompute(): void {
+    let maxManaForComputation = +this.profile.maxMana;
+    maxManaForComputation = this.arcaneIntellect
+      ? maxManaForComputation + 31 * 15.75
+      : maxManaForComputation;
+    maxManaForComputation = this.markOfTheWild
+      ? maxManaForComputation + 12 * 15.75
+      : maxManaForComputation;
+    maxManaForComputation = this.improvedMarkOfTheWild
+      ? maxManaForComputation + 4 * 15.75
+      : maxManaForComputation;
+
+    let criticalStrikeForComputation = +this.profile.criticalRate;
+    criticalStrikeForComputation = this.arcaneIntellect
+      ? criticalStrikeForComputation + 31 * (1 / 59.2)
+      : criticalStrikeForComputation;
+    criticalStrikeForComputation = this.markOfTheWild
+      ? criticalStrikeForComputation + 12 * (1 / 59.2)
+      : criticalStrikeForComputation;
+    criticalStrikeForComputation = this.markOfTheWild
+      ? criticalStrikeForComputation + 4 * (1 / 59.2)
+      : criticalStrikeForComputation;
+
     const healOuputObject = Utils.healOutput(
       +this.time,
-      +this.profile.maxMana,
+      maxManaForComputation,
       +this.profile.mp5,
       this.spell,
       +this.profile.healBonus,
-      +this.profile.criticalRate / 100
+      criticalStrikeForComputation / 100
     );
 
     this.healingPotential = healOuputObject.maxHeal;
@@ -104,11 +124,11 @@ It will affect maximum mana and critical chance`;
     // Mp5 Value
     const additionalHealingMp5 = Utils.healOutput(
       +this.time,
-      +this.profile.maxMana,
+      maxManaForComputation,
       +this.profile.mp5 + this.mp5ValueStep,
       this.spell,
       +this.profile.healBonus,
-      +this.profile.criticalRate / 100
+      criticalStrikeForComputation / 100
     ).maxHeal;
     this.mp5Value =
       (additionalHealingMp5 - this.healingPotential) / this.mp5ValueStep;
@@ -116,11 +136,11 @@ It will affect maximum mana and critical chance`;
     // Intel Value
     const additionalHealingIntel = Utils.healOutput(
       +this.time,
-      +this.profile.maxMana + this.intelValueStep * 15.75,
+      maxManaForComputation + this.intelValueStep * 15.75,
       +this.profile.mp5,
       this.spell,
       +this.profile.healBonus,
-      (+this.profile.criticalRate + this.intelValueStep / 59.2) / 100
+      (criticalStrikeForComputation + this.intelValueStep / 59.2) / 100
     ).maxHeal;
     this.intelValue =
       (additionalHealingIntel - this.healingPotential) / this.intelValueStep;
@@ -128,11 +148,11 @@ It will affect maximum mana and critical chance`;
     // Heal Bonus Value
     const additionalHealingHealBonus = Utils.healOutput(
       +this.time,
-      +this.profile.maxMana,
+      maxManaForComputation,
       +this.profile.mp5,
       this.spell,
       +this.profile.healBonus + this.healBonusValueStep,
-      +this.profile.criticalRate / 100
+      criticalStrikeForComputation / 100
     ).maxHeal;
     this.healBonusValue =
       (additionalHealingHealBonus - this.healingPotential) /
@@ -141,11 +161,11 @@ It will affect maximum mana and critical chance`;
     // Mana value
     const additionalHealingMana = Utils.healOutput(
       +this.time,
-      +this.profile.maxMana + this.manaValueStep,
+      maxManaForComputation + this.manaValueStep * 1.05,
       +this.profile.mp5,
       this.spell,
       +this.profile.healBonus,
-      +this.profile.criticalRate / 100
+      criticalStrikeForComputation / 100
     ).maxHeal;
     this.manaValue =
       (additionalHealingMana - this.healingPotential) / this.manaValueStep;
@@ -153,11 +173,11 @@ It will affect maximum mana and critical chance`;
     // Critical strike value
     const additionalCriticalStrike = Utils.healOutput(
       +this.time,
-      +this.profile.maxMana,
+      maxManaForComputation,
       +this.profile.mp5,
       this.spell,
       +this.profile.healBonus,
-      (+this.profile.criticalRate + this.criticalStrikeValueStep) / 100
+      (criticalStrikeForComputation + this.criticalStrikeValueStep) / 100
     ).maxHeal;
     this.criticalStrikeValue =
       (additionalCriticalStrike - this.healingPotential) /
@@ -195,5 +215,12 @@ It will affect maximum mana and critical chance`;
       profile.healBonus,
       profile.criticalRate
     );
+  }
+
+  changeMark(markValue: boolean): void {
+    this.markOfTheWild = markValue;
+    if (!markValue) {
+      this.improvedMarkOfTheWild = false;
+    }
   }
 }

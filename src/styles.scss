@@ -4,6 +4,10 @@ body {
   background-color: rgba(200, 200, 200);
 }
 
+p {
+    text-align: justify
+}
+
 /* Hide scrollbar for Chrome, Safari and Opera */
 .example::-webkit-scrollbar {
   display: none;
@@ -19,4 +23,5 @@ body {
   white-space: pre-wrap;
   margin-left: 75px;
   margin-right: -75px;
+  min-width: 200px;
 }

@@ -1,5 +1,138 @@
 <div class="container-fluid">
   <div class="row">
+    <div class="col mt-3">
+      <div class="card p-3">
+        <h5>Welcome to the healing potential app for shamans</h5>
+        <h6>What is it?</h6>
+        <p>
+          Have you ever compare two items and wondered for a moment which one
+          would benefit the most your healing abilities? If your answer is yes,
+          you've come to the right place! The healing potential app is made to
+          compute how much HP you can heal through a whole fight by informing
+          the key factors. By varying those factors you can easily see the
+          effect on the healing potential and assess which ones matter the most.
+          <br />
+        </p>
+        <h6>How to use it?</h6>
+        <p>
+          Simply inform the variables and modifiers below before clicking on the
+          "Compute score" button, The result will be shown below it. The healing
+          potential represents the number of hp you can heal during the whole
+          fight. The detailed results shows which ranks will be used, and the
+          value of each stats, which is how much healing potential it would add
+          by having 1 more of that stat.
+        </p>
+        <h6>How is it done?</h6>
+        <span>
+          It will be explained in another section of this site soon. For now
+          here's the main assumptions:
+        </span>
+        <ul>
+          <li>You finish the fight with as few mana as possible</li>
+          <li>
+            You are casting non-stop (therefore no regen related to spirit
+            because of
+            <a
+              href="https://wow.gamepedia.com/Five_second_rule#:~:text=The%20five%20second%20rule%20was,%2Dusing%20classes%2C%20especially%20healers."
+              target="_blank"
+              rel="noopener noreferrer"
+              >the five second rule</a
+            >)
+          </li>
+          <li>
+            You have more than 300 heal bonus (because it expects
+            <a
+              href="https://www.wowdownrank.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              >downranked</a
+            >
+            spells to be the most mana efficient)
+          </li>
+          <li>
+            You have all the talents that are useful for healing
+            <ul>
+              <li>
+                <a
+                  data-wh-rename-link="true"
+                  data-wh-icon-size="small"
+                  href="https://classic.wowhead.com/spell=16229/improved-healing-wave"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                ></a>
+              </li>
+              <li>
+                <a
+                  data-wh-rename-link="true"
+                  data-wh-icon-size="small"
+                  href="https://classic.wowhead.com/spell=16217/tidal-focus"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                ></a>
+              </li>
+              <li>
+                <a
+                  data-wh-rename-link="true"
+                  data-wh-icon-size="small"
+                  href="https://classic.wowhead.com/spell=16221/tidal-mastery"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                ></a>
+              </li>
+              <li>
+                <a
+                  data-wh-rename-link="true"
+                  data-wh-icon-size="small"
+                  href="https://classic.wowhead.com/spell=16213/purification"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                ></a>
+              </li>
+              <li>
+                <a
+                  data-wh-rename-link="true"
+                  data-wh-icon-size="small"
+                  href="https://classic.wowhead.com/spell=17489/ancestral-knowledge"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                ></a>
+              </li>
+              <li>
+                <a
+                  data-wh-rename-link="true"
+                  data-wh-icon-size="small"
+                  href="https://classic.wowhead.com/spell=16208/restorative-totems"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                ></a>
+              </li>
+              <li>
+                <a
+                  data-wh-rename-link="true"
+                  data-wh-icon-size="small"
+                  href="https://classic.wowhead.com/spell=17359/mana-tide-totem"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                ></a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+        <span>
+          Don't hesitate to hover the
+          <i
+            class="fa fa-question-circle"
+            placement="top"
+            ngbTooltip="Question circle icons"
+            tooltipClass="custom-tooltip"
+            style="display: inline-block;"
+          ></i>
+          all over the place for more infos.
+        </span>
+      </div>
+    </div>
+  </div>
+  <div class="row">
     <div class="col-xl-4 col-lg-6 col-md-6 col-sm-12 mt-3">
       <div class="card p-3">
         <app-shaman-calculation

@@ -172,58 +172,129 @@
     </button>
   </div>
 </div>
-<!-- <hr />
+<hr />
 <h5>
   <i
     class="fa fa-question-circle"
     placement="top"
     [ngbTooltip]="modifierTooltip"
+    tooltipClass="custom-tooltip"
   ></i>
   Modifiers:
 </h5>
-<div class="form-check">
+
+<div class="custom-control custom-checkbox">
   <input
+    class="custom-control-input"
     type="checkbox"
     [id]="id + '-arcane'"
-    [(ngModel)]="arcaneIntelligence"
-    class="form-check-input"
+    [(ngModel)]="arcaneIntellect"
   />
-  <label class="form-check-label" [for]="id + '-arcane'">
-    Arcane Intelligence
+  <label class="custom-control-label" [for]="id + '-arcane'">
+    Arcane Intellect
   </label>
+  <a
+    class="ml-1"
+    href="
+  https://classic.wowhead.com/spell=10157/arcane-intellect"
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    <i class="fa fa-external-link fa-xs"></i>
+  </a>
 </div>
 
-<div class="form-check">
+<span class="custom-control custom-checkbox" style="display: inline-block;">
   <input
+    class="custom-control-input"
     type="checkbox"
     [id]="id + '-mark'"
-    [(ngModel)]="markOfTheWild"
-    class="form-check-input"
+    [ngModel]="markOfTheWild"
+    (ngModelChange)="changeMark($event)"
   />
-  <label class="form-check-label" [for]="id + '-mark'">
+  <span class="custom-control-indicator"></span>
+  <label class="custom-control-label" [for]="id + '-mark'">
     Mark of the Wild
   </label>
-</div> -->
+  <a
+    class="ml-1"
+    href="https://classic.wowhead.com/spell=9885/mark-of-the-wild"
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    <i class="fa fa-external-link fa-xs"></i>
+  </a>
+</span>
+
+<span *ngIf="markOfTheWild">
+  -
+  <span class="custom-control custom-checkbox" style="display: inline-block;">
+    <input
+      class="custom-control-input"
+      type="checkbox"
+      [id]="id + '-improved-mark'"
+      [(ngModel)]="improvedMarkOfTheWild"
+    />
+    <label class="custom-control-label" [for]="id + '-improved-mark'">
+      Improved
+    </label>
+    <a
+      class="ml-1"
+      href="https://classic.wowhead.com/spell=17055/improved-mark-of-the-wild"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      <i class="fa fa-external-link fa-xs"></i>
+    </a>
+  </span>
+</span>
 
 <hr />
+
 <div class="row">
   <div class="col">
-    <input
-      type="radio"
-      [id]="id + '-healing-wave'"
-      [name]="id + '-spell'"
-      value="healing-wave"
-      [(ngModel)]="spell"
-    />
-    <label [attr.for]="id + '-healing-wave'"> Healing wave</label><br />
-    <input
-      type="radio"
-      [id]="id + '-chain-heal'"
-      [name]="id + '-spell'"
-      value="chain-heal"
-      [(ngModel)]="spell"
-    />
-    <label [attr.for]="id + '-chain-heal'"> Chain heal</label><br />
+    <div class="custom-control custom-radio">
+      <input
+        class="custom-control-input"
+        type="radio"
+        [id]="id + '-healing-wave'"
+        [name]="id + '-spell'"
+        value="healing-wave"
+        [(ngModel)]="spell"
+      />
+      <label
+        class="custom-control-label green"
+        [attr.for]="id + '-healing-wave'"
+      >
+        Healing wave
+      </label>
+      <a
+        class="ml-1"
+        href="https://classic.wowhead.com/spell=25357/healing-wave"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <i class="fa fa-external-link fa-xs"></i>
+      </a>
+    </div>
+    <div class="custom-control custom-radio">
+      <input
+        class="custom-control-input"
+        type="radio"
+        [id]="id + '-chain-heal'"
+        [name]="id + '-spell'"
+        value="chain-heal"
+        [(ngModel)]="spell"
+      />
+      <label class="custom-control-label green" [attr.for]="id + '-chain-heal'">
+        Chain heal</label
+      ><a
+        class="ml-1"
+        href="https://classic.wowhead.com/spell=10623/chain-heal"
+      >
+        <i class="fa fa-external-link fa-xs"></i>
+      </a>
+    </div>
   </div>
 </div>
 <div class="row">

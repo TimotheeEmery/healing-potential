@@ -43,5 +43,24 @@ select.form-control.left {
 }
 
 label {
-    margin-bottom: 0;
+  margin-bottom: 0;
+}
+
+.custom-checkbox .custom-control-input:checked ~ .custom-control-label::before {
+  color: white !important;
+  background-color: green !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
+
+.custom-control-label::before {
+  box-shadow: none !important;
+}
+
+.custom-control-input:checked ~ .custom-control-label::before {
+  color: #fff;
+}
+
+.custom-control-input:checked ~ .custom-control-label.green::before {
+  background-color: green;
 }
