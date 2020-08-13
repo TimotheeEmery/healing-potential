@@ -14,3 +14,9 @@ body {
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
 }
+
+.custom-tooltip .tooltip-inner {
+  white-space: pre-wrap;
+  margin-left: 75px;
+  margin-right: -75px;
+}

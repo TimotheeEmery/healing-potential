@@ -65,17 +65,20 @@ export class ShamanCalculationComponent implements OnInit {
   compared: string;
 
   // Tooltips
+  criticalRateVariableTooltip = `Chance to get a critical strike with spell.
+Value above 100 will resolve to 100`;
   t0Tooltip = `Dungeons and BoE`;
   t1Tooltip = `Molten Core`;
   t2Tooltip = `Black Wing Lair`;
-  applyIntelTooltip = `Click on the button to apply the informed intel value, it will affect maximum mana and critical chance`;
+  applyIntelTooltip = `Click on the button to apply the informed intel value.
+It will affect maximum mana and critical chance`;
   profileTooltip = `Click on a profile to set those stats above`;
   modifierTooltip = `Check what modifiers should apply during calculation`;
-  intelValueTooltip = `Average heal increase per intel during the next ${this.intelValueStep} intel`;
-  mp5ValueTooltip = `Average heal increase per mp5 during the next ${this.mp5ValueStep} mp5`;
-  healBonusValueTooltip = `Average heal increase per heal bonus during the next ${this.healBonusValueStep} heal bonus`;
-  criticalStrikeValueTooltip = `Average heal increase per critical strike % during the next ${this.criticalStrikeValueStep}%`;
-  manaValueTooltip = `Average heal increase per mana during the next ${this.manaValueStep} mana`;
+  intelValueTooltip = `Average healing potential increase per intel over the next ${this.intelValueStep} intel`;
+  mp5ValueTooltip = `Average healing potential increase per mp5 over the next ${this.mp5ValueStep} mp5`;
+  healBonusValueTooltip = `Average healing potential increase per heal bonus over the next ${this.healBonusValueStep} heal bonus`;
+  criticalStrikeValueTooltip = `Average healing potential increase per critical strike % over the next ${this.criticalStrikeValueStep}%`;
+  manaValueTooltip = `Average healing potential increase per mana over the next ${this.manaValueStep} mana`;
 
   constructor() {}
 
@@ -107,7 +110,8 @@ export class ShamanCalculationComponent implements OnInit {
       +this.profile.healBonus,
       +this.profile.criticalRate / 100
     ).maxHeal;
-    this.mp5Value = (additionalHealingMp5 - this.healingPotential) / this.mp5ValueStep;
+    this.mp5Value =
+      (additionalHealingMp5 - this.healingPotential) / this.mp5ValueStep;
 
     // Intel Value
     const additionalHealingIntel = Utils.healOutput(
@@ -116,9 +120,10 @@ export class ShamanCalculationComponent implements OnInit {
       +this.profile.mp5,
       this.spell,
       +this.profile.healBonus,
-      (+this.profile.criticalRate +  this.intelValueStep / 59.2) / 100
+      (+this.profile.criticalRate + this.intelValueStep / 59.2) / 100
     ).maxHeal;
-    this.intelValue = (additionalHealingIntel - this.healingPotential) /  this.intelValueStep;
+    this.intelValue =
+      (additionalHealingIntel - this.healingPotential) / this.intelValueStep;
 
     // Heal Bonus Value
     const additionalHealingHealBonus = Utils.healOutput(
@@ -130,7 +135,8 @@ export class ShamanCalculationComponent implements OnInit {
       +this.profile.criticalRate / 100
     ).maxHeal;
     this.healBonusValue =
-      (additionalHealingHealBonus - this.healingPotential) / this.healBonusValueStep;
+      (additionalHealingHealBonus - this.healingPotential) /
+      this.healBonusValueStep;
 
     // Mana value
     const additionalHealingMana = Utils.healOutput(
@@ -141,7 +147,8 @@ export class ShamanCalculationComponent implements OnInit {
       +this.profile.healBonus,
       +this.profile.criticalRate / 100
     ).maxHeal;
-    this.manaValue = (additionalHealingMana - this.healingPotential) / this.manaValueStep;
+    this.manaValue =
+      (additionalHealingMana - this.healingPotential) / this.manaValueStep;
 
     // Critical strike value
     const additionalCriticalStrike = Utils.healOutput(
@@ -153,7 +160,8 @@ export class ShamanCalculationComponent implements OnInit {
       (+this.profile.criticalRate + this.criticalStrikeValueStep) / 100
     ).maxHeal;
     this.criticalStrikeValue =
-      (additionalCriticalStrike - this.healingPotential) / this.criticalStrikeValueStep;
+      (additionalCriticalStrike - this.healingPotential) /
+      this.criticalStrikeValueStep;
 
     this.baseSelect = this.mp5Value;
     this.compareToSelect = this.healBonusValue;
