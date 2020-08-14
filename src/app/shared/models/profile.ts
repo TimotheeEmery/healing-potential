@@ -3,6 +3,7 @@ export class Profile {
     public maxMana: string,
     public mp5: string,
     public healBonus: string,
-    public criticalRate: string
+    public criticalRate: string,
+    public intelligence: string
   ) {}
 }

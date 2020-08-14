@@ -14,7 +14,7 @@
         placeholder="Enter Time"
       />
       <div class="input-group-append">
-        <span class="input-group-text">seconds</span>
+        <span class="input-group-text">sec</span>
       </div>
     </div>
   </div>
@@ -27,6 +27,7 @@
     <div class="input-group">
       <input
         class="form-control"
+        [ngClass]="{ 'just-changed-by-apply-control': manaModified }"
         appNumbersOnly
         [ngModel]="profile.maxMana | number: '1.0-0' | remover: ','"
         (ngModelChange)="profile.maxMana = $event"
@@ -45,6 +46,7 @@
     <div class="input-group">
       <input
         class="form-control"
+        [ngClass]="{ 'just-changed-by-apply-control': mp5Modified }"
         appNumbersOnly
         [(ngModel)]="profile.mp5"
         type="text"
@@ -62,6 +64,7 @@
     <div class="input-group">
       <input
         class="form-control"
+        [ngClass]="{ 'just-changed-by-apply-control': healBonusModified }"
         appNumbersOnly
         [(ngModel)]="profile.healBonus"
         type="text"
@@ -78,7 +81,7 @@
         class="fa fa-question-circle"
         placement="top"
         [ngbTooltip]="criticalRateVariableTooltip"
-        tooltipClass="custom-tooltip"
+        tooltipClass="custom-tooltip top-right-tooltip"
       ></i>
       Critical rate:</label
     >
@@ -89,6 +92,7 @@
         appDecimalNumbersOnly
         type="text"
         class="form-control"
+        [ngClass]="{ 'just-changed-by-apply-control': criticalRateModified }"
         [ngModel]="profile.criticalRate | number: '1.0-2' | remover: ','"
         (ngModelChange)="profile.criticalRate = $event"
         maxlength="5"
@@ -104,11 +108,11 @@
 <div class="row mb-3 d-flex h-100">
   <div class="col align-self-center">
     <div class="input-group">
-      <div class="input-group-prepend green-bg">
+      <div class="input-group-prepend light-green-bg">
         <button
           placement="top"
           [ngbTooltip]="applyIntelTooltip"
-          tooltipClass="custom-tooltip"
+          tooltipClass="custom-tooltip top-right-tooltip"
           [openDelay]="300"
           class="btn btn-success"
           type="button"
@@ -134,7 +138,7 @@
     class="fa fa-question-circle"
     placement="top"
     [ngbTooltip]="profileTooltip"
-    tooltipClass="custom-tooltip"
+    tooltipClass="custom-tooltip top-right-tooltip"
   ></i>
   Apply profile:
 </h5>
@@ -143,7 +147,7 @@
     <button
       placement="top"
       [ngbTooltip]="t0Tooltip"
-      tooltipClass="custom-tooltip"
+      tooltipClass="custom-tooltip top-right-tooltip"
       [openDelay]="300"
       class="btn btn-success mr-1"
       (click)="applyProfile(t0Profile)"
@@ -153,7 +157,7 @@
     <button
       placement="top"
       [ngbTooltip]="t1Tooltip"
-      tooltipClass="custom-tooltip"
+      tooltipClass="custom-tooltip top-right-tooltip"
       [openDelay]="300"
       class="btn btn-success mr-1"
       (click)="applyProfile(t1Profile)"
@@ -163,7 +167,7 @@
     <button
       placement="top"
       [ngbTooltip]="t2Tooltip"
-      tooltipClass="custom-tooltip"
+      tooltipClass="custom-tooltip top-right-tooltip"
       [openDelay]="300"
       class="btn btn-success mr-1"
       (click)="applyProfile(t2Profile)"
@@ -178,7 +182,7 @@
     class="fa fa-question-circle"
     placement="top"
     [ngbTooltip]="modifierTooltip"
-    tooltipClass="custom-tooltip"
+    tooltipClass="custom-tooltip top-right-tooltip"
   ></i>
   Modifiers:
 </h5>
@@ -199,8 +203,9 @@
   https://classic.wowhead.com/spell=10157/arcane-intellect"
     target="_blank"
     rel="noopener noreferrer"
+    data-wowhead="buff"
   >
-    <i class="fa fa-external-link fa-xs"></i>
+    <i class="fas fa-external-link-alt fa-sm"></i>
   </a>
 </div>
 
@@ -221,13 +226,14 @@
     href="https://classic.wowhead.com/spell=9885/mark-of-the-wild"
     target="_blank"
     rel="noopener noreferrer"
+    data-wowhead="buff"
   >
-    <i class="fa fa-external-link fa-xs"></i>
+    <i class="fas fa-external-link-alt fa-sm"></i>
   </a>
 </span>
 
 <span *ngIf="markOfTheWild">
-  -
+  <span class="mx-1">-</span>
   <span class="custom-control custom-checkbox" style="display: inline-block;">
     <input
       class="custom-control-input"
@@ -244,9 +250,336 @@
       target="_blank"
       rel="noopener noreferrer"
     >
-      <i class="fa fa-external-link fa-xs"></i>
+      <i class="fas fa-external-link-alt fa-sm"></i>
     </a>
   </span>
+</span>
+
+<span class="custom-control custom-checkbox">
+  <input
+    class="custom-control-input"
+    type="checkbox"
+    [id]="id + '-rallying'"
+    [(ngModel)]="rallyingCryDragonslayer"
+  />
+  <span class="custom-control-indicator"></span>
+  <label class="custom-control-label" [for]="id + '-rallying'">
+    Rallying Cry of the Dragonslayer
+  </label>
+  <a
+    class="ml-1"
+    href="https://classic.wowhead.com/spell=22888/rallying-cry-of-the-dragonslayer"
+    target="_blank"
+    rel="noopener noreferrer"
+    data-wowhead="buff"
+  >
+    <i class="fas fa-external-link-alt fa-sm"></i>
+  </a>
+</span>
+
+<div class="row">
+  <div class="col-8 my-auto">
+    <span class="custom-control custom-checkbox my-auto">
+      <input
+        class="custom-control-input"
+        type="checkbox"
+        [id]="id + '-zandalar'"
+        [(ngModel)]="spiritOfZandalar"
+      />
+      <span class="custom-control-indicator"></span>
+      <label class="custom-control-label" [for]="id + '-zandalar'">
+        Spirit of Zandalar
+      </label>
+      <a
+        class="ml-1"
+        href="https://classic.wowhead.com/spell=24425/spirit-of-zandalar"
+        target="_blank"
+        rel="noopener noreferrer"
+        data-wowhead="buff"
+      >
+        <i class="fas fa-external-link-alt fa-sm"></i>
+      </a>
+    </span>
+  </div>
+  <div class="col pr-3 pl-1">
+    <ng-container *ngIf="spiritOfZandalar">
+      <span class="input-group input-group-sm">
+        <input
+          class="form-control input-sm"
+          [ngClass]="{ 'just-changed-by-apply-control': intelModified }"
+          [ngModel]="profile.intelligence | number: '1.0-0' | remover: ','"
+          (ngModelChange)="profile.intelligence = $event"
+          appNumbersOnly
+          type="text"
+          maxlength="3"
+          placeholder="Enter Intel"
+        />
+        <div
+          class="input-group-append"
+          placement="top"
+          [ngbTooltip]="zandalarIntelTooltip"
+          tooltipClass="custom-tooltip top-left-tooltip"
+        >
+          <span class="input-group-text">Intel</span>
+        </div>
+      </span>
+    </ng-container>
+  </div>
+</div>
+
+<span class="custom-control custom-checkbox">
+  <input
+    class="custom-control-input"
+    type="checkbox"
+    [id]="id + '-warchiefBlessing'"
+    [(ngModel)]="warchiefBlessing"
+  />
+  <label class="custom-control-label" [for]="id + '-warchiefBlessing'">
+    Warchief's Blessing
+  </label>
+  <a
+    class="ml-1"
+    href="
+      https://classic.wowhead.com/spell=16609/warchiefs-blessing"
+    target="_blank"
+    rel="noopener noreferrer"
+    data-wowhead="buff"
+  >
+    <i class="fas fa-external-link-alt fa-sm"></i>
+  </a>
+</span>
+
+<span class="custom-control custom-checkbox">
+  <input
+    class="custom-control-input"
+    type="checkbox"
+    [id]="id + '-slipkikSavvy'"
+    [(ngModel)]="slipkikSavvy"
+    data-wowhead="buff"
+  />
+  <label class="custom-control-label" [for]="id + '-slipkikSavvy'">
+    Slip'kik's Savvy
+  </label>
+  <a
+    class="ml-1"
+    href="
+      https://classic.wowhead.com/spell=22820/slipkiks-savvy"
+    target="_blank"
+    rel="noopener noreferrer"
+    data-wowhead="buff"
+  >
+    <i class="fas fa-external-link-alt fa-sm"></i>
+  </a>
+</span>
+
+<span class="custom-control custom-checkbox">
+  <input
+    class="custom-control-input"
+    type="checkbox"
+    [id]="id + '-darkMoonFaire'"
+    [(ngModel)]="darkMoonFaire"
+  />
+  <label class="custom-control-label" [for]="id + '-darkMoonFaire'">
+    Dark fortune of intelligence
+  </label>
+  <a
+    class="ml-1"
+    href="https://classic.wowhead.com/spell=23766/sayges-dark-fortune-of-intelligence"
+    target="_blank"
+    rel="noopener noreferrer"
+    data-wowhead="buff"
+  >
+    <i class="fas fa-external-link-alt fa-sm"></i>
+  </a>
+</span>
+
+<span class="custom-control custom-checkbox">
+  <input
+    class="custom-control-input"
+    type="checkbox"
+    [id]="id + '-manaSpringTotem'"
+    [(ngModel)]="manaSpringTotem"
+  />
+  <label class="custom-control-label" [for]="id + '-manaSpringTotem'">
+    Using Mana Spring Totem
+  </label>
+  <a
+    class="ml-1"
+    href="https://classic.wowhead.com/spell=10497/mana-spring-totem"
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    <i class="fas fa-external-link-alt fa-sm"></i>
+  </a>
+</span>
+
+<span class="custom-control custom-checkbox">
+  <input
+    class="custom-control-input"
+    type="checkbox"
+    [id]="id + '-manaTideTotem'"
+    [(ngModel)]="manaTideTotem"
+  />
+  <label class="custom-control-label" [for]="id + '-manaTideTotem'">
+    Mana Tide Totem Up
+  </label>
+  <a
+    class="ml-1"
+    href="https://classic.wowhead.com/spell=17359/mana-tide-totem"
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    <i class="fas fa-external-link-alt fa-sm"></i>
+  </a>
+</span>
+
+<!-- TODO: Add selection logic of potions -->
+<span class="custom-control custom-checkbox potion-blue">
+  <input
+    class="custom-control-input"
+    type="checkbox"
+    [id]="id + '-greaterManaPotion'"
+    [(ngModel)]="greaterManaPotion"
+  />
+  <label class="custom-control-label" [for]="id + '-greaterManaPotion'">
+    Greater Mana Potion
+  </label>
+  <a
+    class="ml-1"
+    href="https://classic.wowhead.com/item=6149/greater-mana-potion"
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    <i class="fas fa-external-link-alt fa-sm"></i>
+  </a>
+</span>
+
+<span class="custom-control custom-checkbox potion-blue">
+  <input
+    class="custom-control-input"
+    type="checkbox"
+    [id]="id + '-superiorManaPotion'"
+    [(ngModel)]="superiorManaPotion"
+  />
+  <label class="custom-control-label" [for]="id + '-superiorManaPotion'">
+    Superior Mana Potion
+  </label>
+  <a
+    class="ml-1"
+    href="https://classic.wowhead.com/item=13443/superior-mana-potion"
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    <i class="fas fa-external-link-alt fa-sm"></i>
+  </a>
+</span>
+
+<span class="custom-control custom-checkbox potion-blue">
+  <input
+    class="custom-control-input"
+    type="checkbox"
+    [id]="id + '-majorManaPotion'"
+    [(ngModel)]="majorManaPotion"
+  />
+  <label class="custom-control-label" [for]="id + '-majorManaPotion'">
+    Major Mana Potion
+  </label>
+  <a
+    class="ml-1"
+    href="https://classic.wowhead.com/item=13444/major-mana-potion"
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    <i class="fas fa-external-link-alt fa-sm"></i>
+  </a>
+</span>
+
+<span class="custom-control custom-checkbox">
+  <input
+    class="custom-control-input"
+    type="checkbox"
+    [id]="id + '-rune'"
+    [(ngModel)]="rune"
+  />
+  <label class="custom-control-label" [for]="id + '-rune'">
+    Dark or Demonic Runes
+  </label>
+  <a
+    class="ml-1"
+    href="https://classic.wowhead.com/item=20520/dark-rune"
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    <i class="fas fa-external-link-alt fa-sm"></i>
+  </a>
+  <a
+    class="ml-1"
+    href="https://classic.wowhead.com/item=12662/demonic-rune"
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    <i class="fas fa-external-link-alt fa-sm"></i>
+  </a>
+</span>
+
+<span class="custom-control custom-checkbox">
+  <input
+    class="custom-control-input"
+    type="checkbox"
+    [id]="id + '-nightFinSoup'"
+    [(ngModel)]="nightFinSoup"
+  />
+  <label class="custom-control-label" [for]="id + '-nightFinSoup'">
+    Night Fin Soup
+  </label>
+  <a
+    class="ml-1"
+    href="https://classic.wowhead.com/item=13931/nightfin-soup"
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    <i class="fas fa-external-link-alt fa-sm"></i>
+  </a>
+</span>
+
+<span class="custom-control custom-checkbox">
+  <input
+    class="custom-control-input"
+    type="checkbox"
+    [id]="id + '-mageBloodPotion'"
+    [(ngModel)]="mageBloodPotion"
+  />
+  <label class="custom-control-label" [for]="id + '-mageBloodPotion'">
+    Mageblood Potion
+  </label>
+  <a
+    class="ml-1"
+    href="https://classic.wowhead.com/item=20007/mageblood-potion"
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    <i class="fas fa-external-link-alt fa-sm"></i>
+  </a>
+</span>
+
+<span class="custom-control custom-checkbox">
+  <input
+    class="custom-control-input"
+    type="checkbox"
+    [id]="id + '-brilliantManaOil'"
+    [(ngModel)]="brilliantManaOil"
+  />
+  <label class="custom-control-label" [for]="id + '-brilliantManaOil'">
+    Brilliant Mana Oil
+  </label>
+  <a
+    class="ml-1"
+    href="https://classic.wowhead.com/item=20748/brilliant-mana-oil"
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    <i class="fas fa-external-link-alt fa-sm"></i>
+  </a>
 </span>
 
 <hr />
@@ -274,7 +607,7 @@
         target="_blank"
         rel="noopener noreferrer"
       >
-        <i class="fa fa-external-link fa-xs"></i>
+        <i class="fas fa-external-link-alt fa-sm"></i>
       </a>
     </div>
     <div class="custom-control custom-radio">
@@ -292,18 +625,19 @@
         class="ml-1"
         href="https://classic.wowhead.com/spell=10623/chain-heal"
       >
-        <i class="fa fa-external-link fa-xs"></i>
+        <i class="fas fa-external-link-alt fa-sm"></i>
       </a>
     </div>
   </div>
 </div>
 <div class="row">
   <div class="col d-flex justify-content-center">
-    <button class="btn-lg btn-primary mt-3 mb-3" (click)="onCompute()">
+    <button class="btn-lg btn-primary mt-4" (click)="onCompute()">
       Compute score
     </button>
   </div>
 </div>
+<hr style="border-top: 2px solid;" />
 <div class="row">
   <div class="col d-flex justify-content-center">
     <span class="main-result"
@@ -311,7 +645,7 @@
     >
   </div>
 </div>
-<hr style="border-top: 2px solid;" />
+<hr />
 <h5>Detailed results:</h5>
 <div class="row">
   <div class="col">
@@ -328,7 +662,7 @@
       class="fa fa-question-circle"
       placement="top"
       [ngbTooltip]="intelValueTooltip"
-      tooltipClass="custom-tooltip"
+      tooltipClass="custom-tooltip top-right-tooltip"
     ></i>
     Intel value: {{ intelValue | number: "1.1-2" }}
   </div>
@@ -339,7 +673,7 @@
       class="fa fa-question-circle"
       placement="top"
       [ngbTooltip]="mp5ValueTooltip"
-      tooltipClass="custom-tooltip"
+      tooltipClass="custom-tooltip top-right-tooltip"
     ></i>
     Mp5 value: {{ mp5Value | number: "1.1-2" }}
   </div>
@@ -350,7 +684,7 @@
       class="fa fa-question-circle"
       placement="top"
       [ngbTooltip]="healBonusValueTooltip"
-      tooltipClass="custom-tooltip"
+      tooltipClass="custom-tooltip top-right-tooltip"
     ></i>
     Heal bonus value: {{ healBonusValue | number: "1.1-2" }}
   </div>
@@ -361,7 +695,7 @@
       class="fa fa-question-circle"
       placement="top"
       [ngbTooltip]="criticalStrikeValueTooltip"
-      tooltipClass="custom-tooltip"
+      tooltipClass="custom-tooltip top-right-tooltip"
     ></i>
     Critical strike value: {{ criticalStrikeValue | number: "1.1-2" }}
   </div>
@@ -372,7 +706,7 @@
       class="fa fa-question-circle"
       placement="top"
       [ngbTooltip]="manaValueTooltip"
-      tooltipClass="custom-tooltip"
+      tooltipClass="custom-tooltip top-right-tooltip"
     ></i>
     Mana value: {{ manaValue | number: "1.1-2" }}
   </div>

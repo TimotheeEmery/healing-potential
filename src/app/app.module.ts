@@ -12,6 +12,7 @@ import { NumbersOnlyDirective } from './shared/numbers-only/numbers-only.directi
 import { DecimalNumbersOnlyDirective } from './shared/numbers-only/decimal-numbers-only.directive';
 import { ShamanCalculationComponent } from './shaman/shaman-calculation/shaman-calculation/shaman-calculation.component';
 import { RemoverPipe } from './shared/remover/remover.pipe';
+import { FooterComponent } from './footer/footer.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { RemoverPipe } from './shared/remover/remover.pipe';
     NumbersOnlyDirective,
     DecimalNumbersOnlyDirective,
     ShamanCalculationComponent,
-    RemoverPipe
+    RemoverPipe,
+    FooterComponent
   ],
   imports: [BrowserModule, NgbModule, FormsModule ],
   providers: [],

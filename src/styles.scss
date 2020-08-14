@@ -5,7 +5,7 @@ body {
 }
 
 p {
-    text-align: justify
+  text-align: justify;
 }
 
 /* Hide scrollbar for Chrome, Safari and Opera */
@@ -21,7 +21,15 @@ p {
 
 .custom-tooltip .tooltip-inner {
   white-space: pre-wrap;
+  min-width: 200px;
+}
+
+.top-left-tooltip .tooltip-inner {
+  margin-right: 75px;
+  margin-left: -75px;
+}
+
+.top-right-tooltip .tooltip-inner {
   margin-left: 75px;
   margin-right: -75px;
-  min-width: 200px;
 }

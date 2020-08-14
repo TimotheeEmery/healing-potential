@@ -11,33 +11,72 @@ export class ShamanCalculationComponent implements OnInit {
   // Variables
   @Input() id: string;
   @Input() time: number;
-  @Input() profile = new Profile('8000', '30', '700', '10');
+  @Input() profile = new Profile('8000', '30', '700', '10', '300');
 
   spell = 'healing-wave';
 
+  manaModified = false;
+  mp5Modified = false;
+  healBonusModified = false;
+  criticalRateModified = false;
+  intelModified = false;
   addIntelNumber = 1;
 
+  // function to cancel the just-applied effects
+  applyManaTimeout;
+  applyMp5Timeout;
+  applyHealBonusTimeout;
+  applycriticalRateTimeout;
+  applyIntelTimeout;
+
   // Profiles
-  t0Profile = new Profile('6000', '10', '300', '5');
-  t1Profile = new Profile('7000', '20', '500', '7');
-  t2Profile = new Profile('8000', '30', '700', '10');
+  t0Profile = new Profile('6000', '10', '300', '5', '200');
+  t1Profile = new Profile('7000', '20', '500', '7', '250');
+  t2Profile = new Profile('8000', '30', '700', '10', '300');
 
   // Modifiers
   arcaneIntellect: boolean; // 31 intel
   markOfTheWild: boolean; // 12 stats
   improvedMarkOfTheWild: boolean; // 12 stats * 35% = 16 stats (?)
+
+  rallyingCryDragonslayer: boolean; // 10% crit.
+  //https://classic.wowhead.com/spell=22888/rallying-cry-of-the-dragonslayer
+
+  spiritOfZandalar: boolean; // Zandalar spirit, 15% stats (after other modifiers?)
+  // https://classic.wowhead.com/spell=24425/spirit-of-zandalar
+
+  warchiefBlessing: boolean; // Rend 10 mp5
+  // https://classic.wowhead.com/spell=16609/warchiefs-blessing
+
+  slipkikSavvy: boolean; // Slip'kik's Savvy - HT spell crit. 3%
+  // https://classic.wowhead.com/spell=22820/slipkiks-savvy
+
   darkMoonFaire: boolean; // Sombrelune, 9 intel
-  // Ony/Nef 10% crit.
-  // Rend ?? mp5
-  // Zandalar spirit, 15% stats (after other modifiers?)
-  // HT spell crit. 3%
-  // Using totem
-  // Mana wave totem up
+  // https://classic.wowhead.com/spell=23766/sayges-dark-fortune-of-intelligence
+
+  manaSpringTotem: boolean; // Using totem
+  // https://classic.wowhead.com/spell=10497/mana-spring-totem
+
+  manaTideTotem: boolean; // Mana wave totem up
+  // https://classic.wowhead.com/spell=17359/mana-tide-totem
+
   // Potions, major, excellent, superior
-  // Demonic/Dark rune
-  // Lutjan, 8 mp5
-  // Bloodmage potion, 12 mp5
-  // Brilliant oil
+  greaterManaPotion: boolean; // https://classic.wowhead.com/item=6149/greater-mana-potion
+  superiorManaPotion: boolean; // https://classic.wowhead.com/item=13443/superior-mana-potion
+  majorManaPotion: boolean; // https://classic.wowhead.com/item=13444/major-mana-potion
+
+  rune: boolean; // Demonic/Dark rune
+  // https://classic.wowhead.com/item=20520/dark-rune
+  // https://classic.wowhead.com/item=12662/demonic-rune
+
+  nightFinSoup: boolean; // 8 mp5
+  // https://classic.wowhead.com/item=13931/nightfin-soup
+
+  mageBloodPotion: boolean; // Mageblood potion, 12 mp5
+  // https://classic.wowhead.com/item=20007/mageblood-potion
+
+  brilliantManaOil: boolean; // Brilliant mana oil, 12 mp5, +25 heal bonus
+  // https://classic.wowhead.com/item=20748/brilliant-mana-oil
 
   // Results
   healingPotential: number;
@@ -77,6 +116,8 @@ It will affect maximum mana and critical chance`;
   healBonusValueTooltip = `Average healing potential increase per heal bonus over the next ${this.healBonusValueStep} heal bonus`;
   criticalStrikeValueTooltip = `Average healing potential increase per critical strike % over the next ${this.criticalStrikeValueStep}%`;
   manaValueTooltip = `Average healing potential increase per mana over the next ${this.manaValueStep} mana`;
+  zandalarIntelTooltip = `Inform total intel without taking other buff into account
+  Intel informed here will affect only the zandalar spirit buff`;
 
   constructor() {}
 
@@ -85,6 +126,8 @@ It will affect maximum mana and critical chance`;
   }
 
   onCompute(): void {
+    const profileToComputeOn: Profile = this.applyAllModifiers(this.profile);
+
     let maxManaForComputation = +this.profile.maxMana;
     maxManaForComputation = this.arcaneIntellect
       ? maxManaForComputation + 31 * 15.75
@@ -188,6 +231,17 @@ It will affect maximum mana and critical chance`;
     this.compare();
   }
 
+  applyAllModifiers(profile: Profile): Profile {
+    let newProfile = new Profile(
+        profile.maxMana,
+        profile.mp5,
+        profile.healBonus,
+        profile.criticalRate,
+        profile.intelligence
+      );
+    return newProfile;
+  }
+
   addIntel(): void {
     if (!this.addIntelNumber) {
       this.addIntelNumber = 0;
@@ -200,6 +254,30 @@ It will affect maximum mana and critical chance`;
       +this.profile.criticalRate +
       +this.addIntelNumber / 59.2
     ).toString();
+    this.profile.intelligence = (
+      +this.profile.intelligence + +this.addIntelNumber
+    ).toString();
+
+    // Apply just modified effect on mana
+    clearTimeout(this.applyManaTimeout);
+    this.manaModified = true;
+    this.applyManaTimeout = setTimeout(() => {
+      this.manaModified = false;
+    }, 1000);
+
+    // Apply just modified effect on critical strike
+    clearTimeout(this.applycriticalRateTimeout);
+    this.criticalRateModified = true;
+    this.applycriticalRateTimeout = setTimeout(() => {
+      this.criticalRateModified = false;
+    }, 1000);
+
+    // Apply just modified effect on intel
+    clearTimeout(this.applyIntelTimeout);
+    this.intelModified = true;
+    this.applyIntelTimeout = setTimeout(() => {
+      this.intelModified = false;
+    }, 1000);
   }
 
   compare(): void {
@@ -213,8 +291,44 @@ It will affect maximum mana and critical chance`;
       profile.maxMana,
       profile.mp5,
       profile.healBonus,
-      profile.criticalRate
+      profile.criticalRate,
+      profile.intelligence
     );
+
+    // Apply just modified effect on mana
+    clearTimeout(this.applyManaTimeout);
+    this.manaModified = true;
+    this.applyManaTimeout = setTimeout(() => {
+      this.manaModified = false;
+    }, 1000);
+
+    // Apply just modified effect on critical strike
+    clearTimeout(this.applycriticalRateTimeout);
+    this.criticalRateModified = true;
+    this.applycriticalRateTimeout = setTimeout(() => {
+      this.criticalRateModified = false;
+    }, 1000);
+
+    // Apply just modified effect on mp5
+    clearTimeout(this.applyMp5Timeout);
+    this.mp5Modified = true;
+    this.applyMp5Timeout = setTimeout(() => {
+      this.mp5Modified = false;
+    }, 1000);
+
+    // Apply just modified effect on heal bonus
+    clearTimeout(this.applyHealBonusTimeout);
+    this.healBonusModified = true;
+    this.applyHealBonusTimeout = setTimeout(() => {
+      this.healBonusModified = false;
+    }, 1000);
+
+    // Apply just modified effect on intel
+    clearTimeout(this.applyIntelTimeout);
+    this.intelModified = true;
+    this.applyIntelTimeout = setTimeout(() => {
+      this.intelModified = false;
+    }, 1000);
   }
 
   changeMark(markValue: boolean): void {
