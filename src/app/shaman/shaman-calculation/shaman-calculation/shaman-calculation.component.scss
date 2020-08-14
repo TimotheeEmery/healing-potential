@@ -6,38 +6,66 @@ input::-webkit-inner-spin-button {
 }
 
 /* Firefox */
-input[type=number] {
+input[type="number"] {
   -moz-appearance: textfield;
 }
 
-input[type=radio]{
-    margin-right: 5px;
+input[type="radio"] {
+  margin-right: 5px;
 }
 
-.input-group{
-    border-radius: 3px;
-    border: solid 1px;
+.input-group {
+  border-radius: 3px;
+  border: solid 1px;
 }
 
-.input-group-text{
-    border-radius: 0;
+.input-group-text {
+  border-radius: 0;
 }
 
-select.form-control.right{
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
+select.form-control.right {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
 }
 
-select.form-control.left{
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
+select.form-control.left {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
 }
 
-.main-result{
-    font-size: 1.5em;
-    font-weight: bold;
+.main-result {
+  font-size: 1.5em;
+  font-weight: bold;
 }
 
-.green-bg{
-    background-color: green;
+.green-bg {
+  background-color: green;
+}
+
+
+label {
+  margin-bottom: 0;
+}
+
+.custom-checkbox .custom-control-input:checked ~ .custom-control-label::before {
+  color: white;
+  background-color: green;
+  border-color: transparent;
+  box-shadow: none;
+}
+
+.custom-checkbox.potion-blue .custom-control-label::before {
+    background-color: lightblue;
+  }
+
+.custom-control-label::before {
+  box-shadow: none !important;
+}
+
+.custom-control-input:checked ~ .custom-control-label.green::before {
+  background-color: green;
+}
+
+.just-changed-by-apply-control {
+    background-color: lightgreen;
 }

@@ -4,6 +4,10 @@ body {
   background-color: rgba(200, 200, 200);
 }
 
+p {
+  text-align: justify;
+}
+
 /* Hide scrollbar for Chrome, Safari and Opera */
 .example::-webkit-scrollbar {
   display: none;
@@ -13,4 +17,19 @@ body {
 .example {
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
+}
+
+.custom-tooltip .tooltip-inner {
+  white-space: pre-wrap;
+  min-width: 200px;
+}
+
+.top-left-tooltip .tooltip-inner {
+  margin-right: 75px;
+  margin-left: -75px;
+}
+
+.top-right-tooltip .tooltip-inner {
+  margin-left: 75px;
+  margin-right: -75px;
 }
